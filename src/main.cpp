@@ -10,6 +10,7 @@ const char *pass = "0985626152a";
 // HTTPS setup
 const char *host = "script.google.com";
 const int httpsPort = 443;
+HTTPSRedirect* client = nullptr;
 const char *fingerPrint = "B1:E0:38:3F:63:8B:82:45:E0:90:72:01:80:B8:8D:04:58:34:08:F8";
 
 // Google script setup
