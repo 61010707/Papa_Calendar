@@ -160,4 +160,5 @@ void loop()
   }
 
   delay(4000);
+  delay(50);
 }
