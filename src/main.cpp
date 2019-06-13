@@ -57,7 +57,7 @@ void setup()
   client->setPrintResponseBody(false);
   client->setContentTypeHeader("application/json");
 
-  Serial.print("COnnecting to : ");
+  Serial.print("Connecting to : ");
   Serial.println(host);
   bool flag = false;
   for (int i = 0; i < 5; i++)
@@ -91,9 +91,8 @@ void setup()
     Serial.println("Certificate mis-match");
   }
 
-  Serial.print("\n Connecting to google calendar ...");
-  Serial.println("=============================");
-  Serial.println(client->GET(url, host));
+  Serial.print("\nConnecting to google calendar ...");
+  Serial.println("\n=============================");
   client->GET(url, host);
   delete client;
   client = nullptr;
@@ -105,6 +104,7 @@ void loop()
   static int connect_count = 0;
   const int MAX_CONNECT = 20;
   static bool flag = false;
+  String get = "";
 
   if (!flag)
   {
@@ -141,7 +141,7 @@ void loop()
 
   if (client->GET(url, host))
   {
-
+    get += client->getResponseBody();
     ++connect_count;
     Serial.print("Connect count while connecting :");
     Serial.println(connect_count);
@@ -152,6 +152,12 @@ void loop()
     Serial.print("Error-count while connecting :");
     Serial.println(error_count);
   }
+
+  Serial.println();
+  Serial.println("GET Respon body : ");
+  Serial.println("===================");
+  Serial.println(get);
+  Serial.println("===================");
 
   if (error_count > 3)
   {
