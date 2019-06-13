@@ -2,6 +2,8 @@
 #include <ESP8266WiFi.h>
 #include <DebugMacros.h>
 #include <HTTPSRedirect.h>
+void PreHTTPSRedirect();
+void HTTPSRedirectConnect();
 
 // Network setup
 const char *ssid = "DrZin2";
@@ -51,6 +53,16 @@ void setup()
   Serial.println("IP address: ");
   Serial.println(WiFi.localIP());
 
+  PreHTTPSRedirect();
+}
+
+void loop()
+{
+  HTTPSRedirectConnect();
+}
+
+void PreHTTPSRedirect()
+{
   //USE HTTPSRedirect to create a new TLS connection
   client = new HTTPSRedirect(httpsPort);
   client->setInsecure();
@@ -98,7 +110,7 @@ void setup()
   client = nullptr;
 }
 
-void loop()
+void HTTPSRedirectConnect()
 {
   static int error_count = 0;
   static int connect_count = 0;
