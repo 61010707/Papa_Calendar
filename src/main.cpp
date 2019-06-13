@@ -4,8 +4,8 @@
 #include <HTTPSRedirect.h>
 
 // Network setup
-const char *ssid = "DrZin";
-const char *pass = "0985626152a";
+const char *ssid = "DrZin2";
+const char *pass = "61010707";
 
 // HTTPS setup
 const char *host = "script.google.com";
@@ -31,7 +31,7 @@ void setup()
   free_heap_before = ESP.getFreeHeap();
   free_stack_before = ESP.getFreeContStack();
 
-  Serial.printf("Free heap: %u\n", free_heap_before);
+  Serial.printf("\nFree heap: %u\n", free_heap_before);
   Serial.printf("Free stack: %u\n", free_stack_before);
 
   Serial.println();
@@ -54,10 +54,10 @@ void setup()
   //USE HTTPSRedirect to create a new TLS connection
   client = new HTTPSRedirect(httpsPort);
   client->setInsecure();
-  client->setPrintResponseBody(true);
+  client->setPrintResponseBody(false);
   client->setContentTypeHeader("application/json");
 
-  Serial.print("COnnecting to : ");
+  Serial.print("Connecting to : ");
   Serial.println(host);
   bool flag = false;
   for (int i = 0; i < 5; i++)
@@ -66,6 +66,7 @@ void setup()
     if (retval == 1)
     {
       flag = true;
+      Serial.println("Connection success ...");
       break;
     }
     else
@@ -90,7 +91,9 @@ void setup()
     Serial.println("Certificate mis-match");
   }
 
-  client->GET(url, host);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+  Serial.print("\nConnecting to google calendar ...");
+  Serial.println("\n=============================");
+  client->GET(url, host);
   delete client;
   client = nullptr;
 }
@@ -101,6 +104,7 @@ void loop()
   static int connect_count = 0;
   const int MAX_CONNECT = 20;
   static bool flag = false;
+  String get = "";
 
   if (!flag)
   {
@@ -118,7 +122,7 @@ void loop()
     if (!client->connected())
     {
       client->connect(host, httpsPort);
-      //client->GET(url, host);
+      client->GET(url, host);
     }
   }
   else
@@ -137,7 +141,7 @@ void loop()
 
   if (client->GET(url, host))
   {
-    
+    get += client->getResponseBody();
     ++connect_count;
     Serial.print("Connect count while connecting :");
     Serial.println(connect_count);
@@ -148,6 +152,12 @@ void loop()
     Serial.print("Error-count while connecting :");
     Serial.println(error_count);
   }
+
+  Serial.println();
+  Serial.println("GET Respon body : ");
+  Serial.println("===================");
+  Serial.println(get);
+  Serial.println("===================");
 
   if (error_count > 3)
   {
