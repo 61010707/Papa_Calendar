@@ -2,6 +2,8 @@
 #include <ESP8266WiFi.h>
 #include <DebugMacros.h>
 #include <HTTPSRedirect.h>
+#include <string.h>
+
 void PreHTTPSRedirect();
 void HTTPSRedirectConnect();
 void wifiConnect();
@@ -30,6 +32,10 @@ boolean toggle = false;  // Control HTTPSRedirect
 boolean toggle1 = false; // Control wifi connect
 char test_GET[] = "English for Communication,\tFri Jun 14 2019 16:00:00 GMT+0700 (ICT)\nThai Society and Culture ,\tMon Jun 17 2019 12:00:00 GMT+0700 (ICT)\nThai Society and Culture ,\tTue Jun 18 2019 12:00:00 GMT+0700 (ICT)\nThai Society and Culture ,\tWed Jun 19 2019 12:00:00 GMT+0700 (ICT)\nEnglish for Communication ,\tThu Jun 20 2019 16:00:00 GMT+0700 (ICT)\n";
 int i = 0;
+char split_char[20][1000];
+char *pch;
+unsigned int x_index = 0;
+unsigned int y_index = 0;
 void setup()
 {
   // put your setup code here, to run once:
@@ -48,16 +54,43 @@ void setup()
     PreHTTPSRedirect();
   }
   Serial.println(test_GET);
+  pch = strtok(test_GET, ",");
+  while (pch != NULL)
+  {
+    Serial.println(pch);
+
+    for (x_index = 0; x_index < (unsigned)strlen(pch); x_index++)
+    {
+      split_char[y_index][x_index] = pch[x_index];
+    }
+    pch = strtok(NULL, ",");
+    y_index++;
+  }
+  Serial.println("in split..");
+  Serial.println("============");
+  for (y_index = 0; y_index < 20; y_index++)
+  {
+    if (split_char[y_index][0] != NULL)
+    {
+      for (x_index = 0; x_index < 100; x_index++)
+      {
+        if (split_char[y_index][x_index] != NULL)
+        {
+          Serial.print(split_char[y_index][x_index]);
+        }
+        else
+        {
+          break;
+        }
+      }
+      Serial.println();
+    }
+  }
+  Serial.println("============");
 }
 
 void loop()
 {
-  if (test_GET != NULL)
-  {
-    Serial.println(test_GET[i]);
-    i = i + 1;
-  }
-
   if (toggle)
   {
     HTTPSRedirectConnect();
