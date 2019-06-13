@@ -4,10 +4,11 @@
 #include <HTTPSRedirect.h>
 void PreHTTPSRedirect();
 void HTTPSRedirectConnect();
-
-// Network setup
-const char *ssid = "DrZin2";
-const char *pass = "61010707";
+void wifiConnect();
+void heapAndStack()
+    // Network setup
+    const char *ssid = "DrZin";
+const char *pass = "0985626152a";
 
 // HTTPS setup
 const char *host = "script.google.com";
@@ -24,18 +25,46 @@ String url = String("/macros/s/") + GScriptId + "/exec";
 unsigned int free_heap_before = 0;
 unsigned int free_stack_before = 0;
 
+//Test String
+boolean toggle = false;  // Control HTTPSRedirect
+boolean toggle1 = false; // Control wifi connect
 void setup()
 {
   // put your setup code here, to run once:
   Serial.begin(115200);
   Serial.flush();
 
+  heapAndStack();
+  
+  if (toggle1)
+  {
+    wifiConnect();
+  }
+
+  if (toggle)
+  {
+    PreHTTPSRedirect();
+  }
+}
+
+void loop()
+{
+  if (toggle)
+  {
+    HTTPSRedirectConnect();
+  }
+}
+
+void heapAndStack()
+{
   free_heap_before = ESP.getFreeHeap();
   free_stack_before = ESP.getFreeContStack();
 
   Serial.printf("\nFree heap: %u\n", free_heap_before);
   Serial.printf("Free stack: %u\n", free_stack_before);
-
+}
+void wifiConnect()
+{
   Serial.println();
   Serial.print("Connecting to Wifi: ");
   Serial.println(ssid);
@@ -52,15 +81,7 @@ void setup()
   Serial.println("Wifi connected");
   Serial.println("IP address: ");
   Serial.println(WiFi.localIP());
-
-  PreHTTPSRedirect();
 }
-
-void loop()
-{
-  HTTPSRedirectConnect();
-}
-
 void PreHTTPSRedirect()
 {
   //USE HTTPSRedirect to create a new TLS connection
