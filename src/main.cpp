@@ -54,7 +54,7 @@ void setup()
   //USE HTTPSRedirect to create a new TLS connection
   client = new HTTPSRedirect(httpsPort);
   client->setInsecure();
-  client->setPrintResponseBody(true);
+  client->setPrintResponseBody(false);
   client->setContentTypeHeader("application/json");
 
   Serial.print("COnnecting to : ");
@@ -118,7 +118,7 @@ void loop()
     if (!client->connected())
     {
       client->connect(host, httpsPort);
-      //client->GET(url, host);
+      client->GET(url, host);
     }
   }
   else
