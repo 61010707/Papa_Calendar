@@ -28,8 +28,8 @@ unsigned int free_stack_before = 0;
 //Test String
 boolean toggle = false;  // Control HTTPSRedirect
 boolean toggle1 = false; // Control wifi connect
-String test_GET = "English for Communication,\tFri Jun 14 2019 16:00:00 GMT+0700 (ICT)\nThai Society and Culture ,\tMon Jun 17 2019 12:00:00 GMT+0700 (ICT)\nThai Society and Culture ,\tTue Jun 18 2019 12:00:00 GMT+0700 (ICT)\nThai Society and Culture ,\tWed Jun 19 2019 12:00:00 GMT+0700 (ICT)\nEnglish for Communication ,\tThu Jun 20 2019 16:00:00 GMT+0700 (ICT)\n";
-
+char test_GET[] = "English for Communication,\tFri Jun 14 2019 16:00:00 GMT+0700 (ICT)\nThai Society and Culture ,\tMon Jun 17 2019 12:00:00 GMT+0700 (ICT)\nThai Society and Culture ,\tTue Jun 18 2019 12:00:00 GMT+0700 (ICT)\nThai Society and Culture ,\tWed Jun 19 2019 12:00:00 GMT+0700 (ICT)\nEnglish for Communication ,\tThu Jun 20 2019 16:00:00 GMT+0700 (ICT)\n";
+int i = 0;
 void setup()
 {
   // put your setup code here, to run once:
@@ -52,11 +52,17 @@ void setup()
 
 void loop()
 {
-  
+  if (test_GET != NULL)
+  {
+    Serial.println(test_GET[i]);
+    i = i + 1;
+  }
+
   if (toggle)
   {
     HTTPSRedirectConnect();
   }
+  delay(1000);
 }
 
 void heapAndStack()
