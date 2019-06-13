@@ -4,8 +4,8 @@
 #include <HTTPSRedirect.h>
 
 // Network setup
-const char *ssid = "DrZin";
-const char *pass = "0985626152a";
+const char *ssid = "DrZin2";
+const char *pass = "61010707";
 
 // HTTPS setup
 const char *host = "script.google.com";
