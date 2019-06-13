@@ -54,28 +54,35 @@ void setup()
     PreHTTPSRedirect();
   }
   Serial.println(test_GET);
-  pch = strtok(test_GET, ",");
+  pch = strtok(test_GET, "\t\n");
+  Serial.print("\nWhile spilt responbody : [");
   while (pch != NULL)
   {
-    Serial.println(pch);
-
+    //Serial.println(pch);
     for (x_index = 0; x_index < (unsigned)strlen(pch); x_index++)
     {
+
       split_char[y_index][x_index] = pch[x_index];
     }
-    pch = strtok(NULL, ",");
+    Serial.print("=");
+    pch = strtok(NULL, "\t\n");
     y_index++;
   }
-  Serial.println("in split..");
-  Serial.println("============");
+  Serial.print("]  100% ");
+  Serial.println();
+  Serial.println(">>>>> split string <<<<<");
+  Serial.println("=========================");
+
   for (y_index = 0; y_index < 20; y_index++)
   {
-    if (split_char[y_index][0] != NULL)
+    if (split_char[y_index][0] != '\0')
     {
+      Serial.printf("[ %u ] ", y_index);
       for (x_index = 0; x_index < 100; x_index++)
       {
-        if (split_char[y_index][x_index] != NULL)
+        if (split_char[y_index][x_index] != '\0')
         {
+
           Serial.print(split_char[y_index][x_index]);
         }
         else
