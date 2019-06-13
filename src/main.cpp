@@ -33,6 +33,11 @@ boolean toggle1 = false; // Control wifi connect
 char test_GET[] = "English for Communication,\tFri Jun 14 2019 16:00:00 GMT+0700 (ICT)\nThai Society and Culture ,\tMon Jun 17 2019 12:00:00 GMT+0700 (ICT)\nThai Society and Culture ,\tTue Jun 18 2019 12:00:00 GMT+0700 (ICT)\nThai Society and Culture ,\tWed Jun 19 2019 12:00:00 GMT+0700 (ICT)\nEnglish for Communication ,\tThu Jun 20 2019 16:00:00 GMT+0700 (ICT)\n";
 int i = 0;
 char split_char[20][1000];
+char title [20][1000];
+char day[20][2];
+char month[20][2];
+char year[20][4];
+char endTime[20][8];
 char *pch;
 unsigned int x_index = 0;
 unsigned int y_index = 0;
