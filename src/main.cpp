@@ -31,7 +31,7 @@ void setup()
   free_heap_before = ESP.getFreeHeap();
   free_stack_before = ESP.getFreeContStack();
 
-  Serial.printf("Free heap: %u\n", free_heap_before);
+  Serial.printf("\nFree heap: %u\n", free_heap_before);
   Serial.printf("Free stack: %u\n", free_stack_before);
 
   Serial.println();
@@ -66,6 +66,7 @@ void setup()
     if (retval == 1)
     {
       flag = true;
+      Serial.println("Connection success ...");
       break;
     }
     else
@@ -90,7 +91,10 @@ void setup()
     Serial.println("Certificate mis-match");
   }
 
-  client->GET(url, host);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+  Serial.print("\n Connecting to google calendar ...");
+  Serial.println("=============================");
+  Serial.println(client->GET(url, host));
+  client->GET(url, host);
   delete client;
   client = nullptr;
 }
@@ -137,7 +141,7 @@ void loop()
 
   if (client->GET(url, host))
   {
-    
+
     ++connect_count;
     Serial.print("Connect count while connecting :");
     Serial.println(connect_count);
@@ -160,5 +164,4 @@ void loop()
   }
 
   delay(4000);
-  
 }
