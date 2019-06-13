@@ -5,9 +5,9 @@
 void PreHTTPSRedirect();
 void HTTPSRedirectConnect();
 void wifiConnect();
-void heapAndStack()
-    // Network setup
-    const char *ssid = "DrZin";
+void heapAndStack();
+// Network setup
+const char *ssid = "DrZin";
 const char *pass = "0985626152a";
 
 // HTTPS setup
@@ -28,6 +28,8 @@ unsigned int free_stack_before = 0;
 //Test String
 boolean toggle = false;  // Control HTTPSRedirect
 boolean toggle1 = false; // Control wifi connect
+String test_GET = "English for Communication,\tFri Jun 14 2019 16:00:00 GMT+0700 (ICT)\nThai Society and Culture ,\tMon Jun 17 2019 12:00:00 GMT+0700 (ICT)\nThai Society and Culture ,\tTue Jun 18 2019 12:00:00 GMT+0700 (ICT)\nThai Society and Culture ,\tWed Jun 19 2019 12:00:00 GMT+0700 (ICT)\nEnglish for Communication ,\tThu Jun 20 2019 16:00:00 GMT+0700 (ICT)\n";
+
 void setup()
 {
   // put your setup code here, to run once:
@@ -35,7 +37,7 @@ void setup()
   Serial.flush();
 
   heapAndStack();
-  
+
   if (toggle1)
   {
     wifiConnect();
@@ -45,10 +47,12 @@ void setup()
   {
     PreHTTPSRedirect();
   }
+  Serial.println(test_GET);
 }
 
 void loop()
 {
+  
   if (toggle)
   {
     HTTPSRedirectConnect();
