@@ -99,20 +99,20 @@ void setup()
       }
    }
    Serial.println("============");
-
    Serial.println();
-   Serial.println("Title list ");
+   Serial.println("Title list from split string ");
+   int y_title = 0;
    for (y_index = 0; y_index < 20; y_index++)
    {
       if (y_index % 2 == 0 && split_char[y_index][0] != '\0')
       {
-         Serial.printf("[ %u ] ", y_index);
+         Serial.printf("[ %u ] ", y_title);
          for (x_index = 0; x_index < 100; x_index++)
          {
             if (split_char[y_index][x_index] != '\0')
             {
-
-               Serial.print(split_char[y_index][x_index]);
+               title[y_title][x_index] = split_char[y_index][x_index];
+               Serial.print(title[y_title][x_index]);
             }
             else
             {
@@ -120,8 +120,11 @@ void setup()
             }
          }
          Serial.println();
+         y_title++;
       }
    }
+
+   
 }
 
 void loop()
