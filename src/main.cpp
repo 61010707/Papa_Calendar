@@ -56,12 +56,15 @@ char endTime[20][10];
 //    1 split char funtion recieve : base char , split_char  , delimeter
 //    2 split char to each char array : base char ,   each cahr
 // ref to issue 18
-void split_str(char *in_str, char *out_str, char delimiter[])
+void split_str(char *in_str, char *out_str, int x_size, int y_size, char delimiter[])
 {
    char *pch = strtok(in_str, delimiter);
+   int y_index = 0;
    while (pch != NULL)
    {
       Serial.println(pch);
+      strcpy((out_str + (y_index * x_size)), pch);
+      y_index++;
       pch = strtok(NULL, delimiter);
    }
 }
@@ -70,8 +73,16 @@ void setup()
    // put your setup code here, to run once:
    Serial.begin(115200);
    Serial.flush();
-
-   split_str(test_GET, (char *)split_char, "\t\n");
+   int x_size = sizeof(split_char[0]);
+   int y_size = sizeof(split_char) / x_size;
+   Serial.printf("x_index : %d , y_index : %d", x_size, y_size);
+   split_str(test_GET, (char *)split_char, x_size, y_size, "\t\n");
+   Serial.println();
+   for (int i = 0; i < y_size; i++)
+   {
+      Serial.println(split_char[i]);
+   }
+   
 }
 
 void loop()
