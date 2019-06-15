@@ -34,6 +34,7 @@ char test_GET[] = "English for Communication,\tFri Jun 14 2019 16:00:00 GMT+0700
 int i = 0;
 char split_char[20][1000];
 char title[20][1000];
+char endDate[20][100];
 char day[20][2];
 char month[20][2];
 char year[20][4];
@@ -98,7 +99,7 @@ void setup()
          Serial.println();
       }
    }
-   Serial.println("============");
+   Serial.println("=======================================");
    Serial.println();
    Serial.println("Title list from split string ");
    int y_title = 0;
@@ -123,8 +124,34 @@ void setup()
          y_title++;
       }
    }
+   Serial.println("=======================================");
+   Serial.println();
+   Serial.println("End Date list from split string");
+   int y_endDate = 0;
+   for (y_index = 0; y_index < 20; y_index++)
+   {
+      if (y_index % 2 != 0 && split_char[y_index][0] != '\0')
+      {
+         Serial.printf("[ %u ] ", y_endDate);
+         for (x_index = 0; x_index < 100; x_index++)
+         {
+            if (split_char[y_index][x_index] != '\0')
+            {
+               Serial.print(split_char[y_index][x_index]);
+            }
+            else
+            {
+               break;
+            }
+         }
+         Serial.println();
+         y_endDate++;
+      }
+   }
 
+   Serial.println(sizeof(split_char)/sizeof(split_char[0]));
    
+   heapAndStack();
 }
 
 void loop()
