@@ -43,9 +43,7 @@ char date[20][10];
 char month[20][10];
 char year[20][10];
 char endTime[20][10];
-char *pch;
-unsigned int x_index = 0;
-unsigned int y_index = 0;
+
 // design from long code to funtion
 // have variable
 //    split_char = for save ssplited char from responbody
@@ -60,13 +58,37 @@ unsigned int y_index = 0;
 //    2 split char to each char array : base char ,   each cahr
 // ref to issue 18
 
-void spl_str(char in_str[],char out_str[],char delimeter[])
+void spl_str(char *in_str)
 {
-Serial.println(in_str);
-Serial.println(out_str);
-Serial.println(delimeter);
-//test config
+   char *pch;
+   int y_index = 0;
+   pch = strtok(in_str, "\t\n");
+   while (pch != NULL)
+   {
+      if (y_index % 2 == 0)
+      {
+         strcpy(title[y_index], pch);
+         Serial.println(title[y_index]);
+      }
+      else
+      {
+         char str[100];
+         strcpy(str,pch);
+         char *pchDate;
+         pchDate = strtok(str, " ");
+         while (pchDate != NULL)
+         {
+            Serial.println(pchDate);
+            pchDate = strtok(NULL, " ");
+         }
+         Serial.println();
+      }
+      pch = strtok(NULL, "\t\n");
+      y_index++;
+   }
+   Serial.println();
 }
+
 void setup()
 {
    // put your setup code here, to run once:
@@ -84,9 +106,9 @@ void setup()
    {
       PreHTTPSRedirect();
    }
-   spl_str(test_GET,split_char[0],"\t\n");
-   //refStringFunc();
-   //ref to issue 18
+
+   spl_str((char *)test_GET);
+
    heapAndStack();
 }
 
@@ -248,7 +270,6 @@ void HTTPSRedirectConnect()
 
    delay(4000);
 }
-
 
 /*void refStringFunc()
 {
