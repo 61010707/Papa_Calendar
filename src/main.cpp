@@ -78,7 +78,7 @@ void setup()
    }
 
    refStringFunc();
-   //ref to issue
+   //ref to issue 18 
    heapAndStack();
 }
 
