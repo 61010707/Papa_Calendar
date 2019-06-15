@@ -8,6 +8,7 @@ void PreHTTPSRedirect();
 void HTTPSRedirectConnect();
 void wifiConnect();
 void heapAndStack();
+void refStringFunc();
 // Network setup
 const char *ssid = "DrZin";
 const char *pass = "0985626152a";
@@ -44,18 +45,18 @@ char endTime[20][10];
 char *pch;
 unsigned int x_index = 0;
 unsigned int y_index = 0;
-// design from long code to funtion 
+// design from long code to funtion
 // have variable
 //    split_char = for save ssplited char from responbody
 //    title
-//    day = day in text 
-//    date = day in number 
-//    month 
-//    year 
-//    endTime 
-// design function 
+//    day = day in text
+//    date = day in number
+//    month
+//    year
+//    endTime
+// design function
 //    1 split char funtion recieve : base char , split_char  , delimeter
-//    2 split char to each char array : base char ,   each cahr 
+//    2 split char to each char array : base char ,   each cahr
 // ref to issue 18
 
 void setup()
@@ -75,6 +76,172 @@ void setup()
    {
       PreHTTPSRedirect();
    }
+
+   refStringFunc();
+   heapAndStack();
+}
+
+void loop()
+{
+   if (toggle)
+   {
+      HTTPSRedirectConnect();
+   }
+   delay(1000);
+}
+
+void heapAndStack()
+{
+   free_heap_before = ESP.getFreeHeap();
+   free_stack_before = ESP.getFreeContStack();
+
+   Serial.printf("\nFree heap: %u\n", free_heap_before);
+   Serial.printf("Free stack: %u\n", free_stack_before);
+}
+void wifiConnect()
+{
+   Serial.println();
+   Serial.print("Connecting to Wifi: ");
+   Serial.println(ssid);
+   Serial.flush();
+
+   WiFi.begin(ssid, pass);
+   while (WiFi.status() != WL_CONNECTED)
+   {
+      /* code */
+      delay(500);
+      Serial.print(".");
+   }
+   Serial.println();
+   Serial.println("Wifi connected");
+   Serial.println("IP address: ");
+   Serial.println(WiFi.localIP());
+}
+void PreHTTPSRedirect()
+{
+   //USE HTTPSRedirect to create a new TLS connection
+   client = new HTTPSRedirect(httpsPort);
+   client->setInsecure();
+   client->setPrintResponseBody(false);
+   client->setContentTypeHeader("application/json");
+
+   Serial.print("Connecting to : ");
+   Serial.println(host);
+   bool flag = false;
+   for (int i = 0; i < 5; i++)
+   {
+      int retval = client->connect(host, httpsPort);
+      if (retval == 1)
+      {
+         flag = true;
+         Serial.println("Connection success ...");
+         break;
+      }
+      else
+      {
+         Serial.println("Connection failed. Retrying ... ");
+      }
+   }
+
+   if (!flag)
+   {
+      Serial.print("Could not connect to server");
+      Serial.println(host);
+      Serial.println("Exiting...");
+   }
+
+   if (client->setFingerprint(fingerPrint))
+   {
+      Serial.println("Certificate match.");
+   }
+   else
+   {
+      Serial.println("Certificate mis-match");
+   }
+
+   Serial.print("\nConnecting to google calendar ...");
+   Serial.println("\n=============================");
+   client->GET(url, host);
+   delete client;
+   client = nullptr;
+}
+
+void HTTPSRedirectConnect()
+{
+   static int error_count = 0;
+   static int connect_count = 0;
+   const int MAX_CONNECT = 20;
+   static bool flag = false;
+   String get = "";
+
+   if (!flag)
+   {
+      free_heap_before = ESP.getFreeHeap();
+      free_stack_before = ESP.getFreeContStack();
+      client = new HTTPSRedirect(httpsPort);
+      client->setInsecure();
+      client->setPrintResponseBody(true);
+      client->setContentTypeHeader("application/json");
+      flag = true;
+   }
+
+   if (client != nullptr)
+   {
+      if (!client->connected())
+      {
+         client->connect(host, httpsPort);
+         client->GET(url, host);
+      }
+   }
+   else
+   {
+      Serial.println("Error creating client object !");
+      error_count = 5;
+   }
+
+   if (connect_count > MAX_CONNECT)
+   {
+      connect_count = 0;
+      flag = false;
+      delete client;
+      return;
+   }
+
+   if (client->GET(url, host))
+   {
+      get += client->getResponseBody();
+      ++connect_count;
+      Serial.print("Connect count while connecting :");
+      Serial.println(connect_count);
+   }
+   else
+   {
+      ++error_count;
+      Serial.print("Error-count while connecting :");
+      Serial.println(error_count);
+   }
+
+   Serial.println();
+   Serial.println("GET Respon body : ");
+   Serial.println("===================");
+   Serial.println(get);
+   Serial.println("===================");
+
+   if (error_count > 3)
+   {
+      Serial.println("Halting processor...");
+      delete client;
+      Serial.printf("Final free heap: %u\n", ESP.getFreeHeap());
+      Serial.printf("Final stack: %u\n", ESP.getFreeContStack());
+      Serial.flush();
+      ESP.deepSleep(0);
+   }
+
+   delay(4000);
+}
+
+void refStringFunc()
+{
    Serial.println(test_GET);
    pch = strtok(test_GET, "\t\n");
    Serial.print("\nWhile spilt responbody : [");
@@ -239,165 +406,4 @@ void setup()
          Serial.println("=============================");
       }
    }
-
-   heapAndStack();
-}
-
-void loop()
-{
-   if (toggle)
-   {
-      HTTPSRedirectConnect();
-   }
-   delay(1000);
-}
-
-void heapAndStack()
-{
-   free_heap_before = ESP.getFreeHeap();
-   free_stack_before = ESP.getFreeContStack();
-
-   Serial.printf("\nFree heap: %u\n", free_heap_before);
-   Serial.printf("Free stack: %u\n", free_stack_before);
-}
-void wifiConnect()
-{
-   Serial.println();
-   Serial.print("Connecting to Wifi: ");
-   Serial.println(ssid);
-   Serial.flush();
-
-   WiFi.begin(ssid, pass);
-   while (WiFi.status() != WL_CONNECTED)
-   {
-      /* code */
-      delay(500);
-      Serial.print(".");
-   }
-   Serial.println();
-   Serial.println("Wifi connected");
-   Serial.println("IP address: ");
-   Serial.println(WiFi.localIP());
-}
-void PreHTTPSRedirect()
-{
-   //USE HTTPSRedirect to create a new TLS connection
-   client = new HTTPSRedirect(httpsPort);
-   client->setInsecure();
-   client->setPrintResponseBody(false);
-   client->setContentTypeHeader("application/json");
-
-   Serial.print("Connecting to : ");
-   Serial.println(host);
-   bool flag = false;
-   for (int i = 0; i < 5; i++)
-   {
-      int retval = client->connect(host, httpsPort);
-      if (retval == 1)
-      {
-         flag = true;
-         Serial.println("Connection success ...");
-         break;
-      }
-      else
-      {
-         Serial.println("Connection failed. Retrying ... ");
-      }
-   }
-
-   if (!flag)
-   {
-      Serial.print("Could not connect to server");
-      Serial.println(host);
-      Serial.println("Exiting...");
-   }
-
-   if (client->setFingerprint(fingerPrint))
-   {
-      Serial.println("Certificate match.");
-   }
-   else
-   {
-      Serial.println("Certificate mis-match");
-   }
-
-   Serial.print("\nConnecting to google calendar ...");
-   Serial.println("\n=============================");
-   client->GET(url, host);
-   delete client;
-   client = nullptr;
-}
-
-void HTTPSRedirectConnect()
-{
-   static int error_count = 0;
-   static int connect_count = 0;
-   const int MAX_CONNECT = 20;
-   static bool flag = false;
-   String get = "";
-
-   if (!flag)
-   {
-      free_heap_before = ESP.getFreeHeap();
-      free_stack_before = ESP.getFreeContStack();
-      client = new HTTPSRedirect(httpsPort);
-      client->setInsecure();
-      client->setPrintResponseBody(true);
-      client->setContentTypeHeader("application/json");
-      flag = true;
-   }
-
-   if (client != nullptr)
-   {
-      if (!client->connected())
-      {
-         client->connect(host, httpsPort);
-         client->GET(url, host);
-      }
-   }
-   else
-   {
-      Serial.println("Error creating client object !");
-      error_count = 5;
-   }
-
-   if (connect_count > MAX_CONNECT)
-   {
-      connect_count = 0;
-      flag = false;
-      delete client;
-      return;
-   }
-
-   if (client->GET(url, host))
-   {
-      get += client->getResponseBody();
-      ++connect_count;
-      Serial.print("Connect count while connecting :");
-      Serial.println(connect_count);
-   }
-   else
-   {
-      ++error_count;
-      Serial.print("Error-count while connecting :");
-      Serial.println(error_count);
-   }
-
-   Serial.println();
-   Serial.println("GET Respon body : ");
-   Serial.println("===================");
-   Serial.println(get);
-   Serial.println("===================");
-
-   if (error_count > 3)
-   {
-      Serial.println("Halting processor...");
-      delete client;
-      Serial.printf("Final free heap: %u\n", ESP.getFreeHeap());
-      Serial.printf("Final stack: %u\n", ESP.getFreeContStack());
-      Serial.flush();
-      ESP.deepSleep(0);
-   }
-
-   delay(4000);
 }
