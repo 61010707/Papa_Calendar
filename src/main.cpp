@@ -44,6 +44,19 @@ char endTime[20][10];
 char *pch;
 unsigned int x_index = 0;
 unsigned int y_index = 0;
+// design from long code to funtion 
+// have variable
+//    split_char = for save ssplited char from responbody
+//    title
+//    day = day in text 
+//    date = day in number 
+//    month 
+//    year 
+//    endTime 
+// design function 
+//    1 split char funtion recieve : base char , split_char  , delimeter
+//    2 split char to each char array : base char ,   each cahr 
+
 void setup()
 {
    // put your setup code here, to run once:
