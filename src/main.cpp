@@ -68,7 +68,6 @@ void spl_str(char *in_str)
       if (y_index % 2 == 0)
       {
          strcpy(title[y_index], pch);
-         Serial.println(title[y_index]);
       }
       else
       {
