@@ -4,6 +4,7 @@
 #include <HTTPSRedirect.h>
 #include <string.h>
 //Fix-9
+//Fix_issue 9
 void PreHTTPSRedirect();
 void HTTPSRedirectConnect();
 void wifiConnect();
