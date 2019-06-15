@@ -35,10 +35,12 @@ int i = 0;
 char split_char[20][1000];
 char title[20][1000];
 char endDate[20][100];
-char day[20][2];
-char month[20][2];
-char year[20][4];
-char endTime[20][8];
+char splitDate[20][100];
+char day[20][10];
+char date[20][10];
+char month[20][10];
+char year[20][10];
+char endTime[20][10];
 char *pch;
 unsigned int x_index = 0;
 unsigned int y_index = 0;
@@ -124,9 +126,11 @@ void setup()
          y_title++;
       }
    }
+
    Serial.println("=======================================");
    Serial.println();
    Serial.println("End Date list from split string");
+
    int y_endDate = 0;
    for (y_index = 0; y_index < 20; y_index++)
    {
@@ -137,7 +141,8 @@ void setup()
          {
             if (split_char[y_index][x_index] != '\0')
             {
-               Serial.print(split_char[y_index][x_index]);
+               endDate[y_endDate][x_index] = split_char[y_index][x_index];
+               Serial.print(endDate[y_endDate][x_index]);
             }
             else
             {
@@ -149,8 +154,78 @@ void setup()
       }
    }
 
-   Serial.println(sizeof(split_char)/sizeof(split_char[0]));
-   
+   Serial.println();
+   Serial.println("while split date...");
+   for (int y_splitDate = 0; y_splitDate < 20; y_splitDate++)
+   {
+
+      if (endDate[y_splitDate][0] != '\0')
+      {
+         int dateIndex = 0;
+         Serial.printf("[ date %d ]\n", y_splitDate);
+         pch = strtok(endDate[y_splitDate], " ");
+         while (pch != NULL)
+         {
+            Serial.printf("index %d :", dateIndex);
+            Serial.println(pch);
+            switch (dateIndex)
+            {
+            case 0:
+               Serial.print("\tin day :");
+               for (unsigned int x_day = 0; x_day < strlen(pch); x_day++)
+               {
+                  day[y_splitDate][x_day] = pch[x_day];
+                  Serial.print(day[y_splitDate][x_day]);
+               }
+               Serial.println();
+               break;
+            case 1:
+               Serial.print("\tin month :");
+               for (unsigned int x_month = 0; x_month < strlen(pch); x_month++)
+               {
+                  month[y_splitDate][x_month] = pch[x_month];
+                  Serial.print(month[y_splitDate][x_month]);
+               }
+               Serial.println();
+               break;
+            case 2:
+               Serial.print("\tin date :");
+               for (unsigned int x_in_loop = 0; x_in_loop < strlen(pch); x_in_loop++)
+               {
+                  date[y_splitDate][x_in_loop] = pch[x_in_loop];
+                  Serial.print(date[y_splitDate][x_in_loop]);
+               }
+               Serial.println();
+               break;
+            case 3:
+               Serial.print("\tin year :");
+               for (unsigned int x_in_loop = 0; x_in_loop < strlen(pch); x_in_loop++)
+               {
+                  year[y_splitDate][x_in_loop] = pch[x_in_loop];
+                  Serial.print(year[y_splitDate][x_in_loop]);
+               }
+               Serial.println();
+               break;
+            case 4:
+               Serial.print("\tin endTime :");
+               for (unsigned int x_in_loop = 0; x_in_loop < strlen(pch); x_in_loop++)
+               {
+                  endTime[y_splitDate][x_in_loop] = pch[x_in_loop];
+                  Serial.print(endTime[y_splitDate][x_in_loop]);
+               }
+               Serial.println();
+               break;
+            default:
+               break;
+            }
+
+            pch = strtok(NULL, " ");
+            dateIndex++;
+         }
+         Serial.println("=============================");
+      }
+   }
+
    heapAndStack();
 }
 
