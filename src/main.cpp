@@ -33,7 +33,6 @@ boolean toggle = false;  // Control HTTPSRedirect
 boolean toggle1 = false; // Control wifi connect
 char test_GET[1000] = "English for Communication,\tFri Jun 14 2019 16:00:00 GMT+0700 (ICT)\nThai Society and Culture ,\tMon Jun 17 2019 12:00:00 GMT+0700 (ICT)\nThai Society and Culture ,\tTue Jun 18 2019 12:00:00 GMT+0700 (ICT)\nThai Society and Culture ,\tWed Jun 19 2019 12:00:00 GMT+0700 (ICT)\nEnglish for Communication ,\tThu Jun 20 2019 16:00:00 GMT+0700 (ICT)\n";
 
-int i = 0;
 char split_char[20][1000];
 char title[20][1000];
 char endDate[20][100];
@@ -57,67 +56,26 @@ char endTime[20][10];
 //    1 split char funtion recieve : base char , split_char  , delimeter
 //    2 split char to each char array : base char ,   each cahr
 // ref to issue 18
-
-void spl_str(char *in_str)
+void split_str(char *in_str, char *out_str, char delimiter[])
 {
-   char *pch;
-   int y_index = 0;
-   char str[100];
-   char *pchDate;
-   pch = strtok(in_str, "\t\n");
+   char *pch = strtok(in_str, delimiter);
    while (pch != NULL)
    {
-      if (y_index % 2 == 0)
-      {
-         strcpy(title[y_index], pch);
-      }
-      else
-      {
-         strcpy(str, pch);
-         pchDate = strtok(str, " ");
-         while (pchDate != NULL)
-         {
-            Serial.println(pchDate);
-            pchDate = strtok(NULL, " ");
-         }
-         Serial.println(pch);
-      }
-      pch = strtok(NULL, "\t\n");
-      y_index++;
+      Serial.println(pch);
+      pch = strtok(NULL, delimiter);
    }
-   Serial.println();
 }
-
 void setup()
 {
    // put your setup code here, to run once:
    Serial.begin(115200);
    Serial.flush();
 
-   heapAndStack();
-
-   if (toggle1)
-   {
-      wifiConnect();
-   }
-
-   if (toggle)
-   {
-      PreHTTPSRedirect();
-   }
-
-   spl_str((char *)test_GET);
-
-   heapAndStack();
+   split_str(test_GET, (char *)split_char, "\t\n");
 }
 
 void loop()
 {
-   if (toggle)
-   {
-      HTTPSRedirectConnect();
-   }
-   delay(1000);
 }
 
 void heapAndStack()
