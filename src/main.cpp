@@ -65,6 +65,7 @@ void spl_str(char in_str[],char out_str[],char delimeter[])
 Serial.println(in_str);
 Serial.println(out_str);
 Serial.println(delimeter);
+//test config
 }
 void setup()
 {
