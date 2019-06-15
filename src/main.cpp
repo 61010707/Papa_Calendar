@@ -3,7 +3,7 @@
 #include <DebugMacros.h>
 #include <HTTPSRedirect.h>
 #include <string.h>
-
+// add some comment
 void PreHTTPSRedirect();
 void HTTPSRedirectConnect();
 void wifiConnect();
