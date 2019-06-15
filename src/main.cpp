@@ -62,6 +62,8 @@ void spl_str(char *in_str)
 {
    char *pch;
    int y_index = 0;
+   char str[100];
+   char *pchDate;
    pch = strtok(in_str, "\t\n");
    while (pch != NULL)
    {
@@ -71,16 +73,14 @@ void spl_str(char *in_str)
       }
       else
       {
-         char str[100];
-         strcpy(str,pch);
-         char *pchDate;
+         strcpy(str, pch);
          pchDate = strtok(str, " ");
          while (pchDate != NULL)
          {
             Serial.println(pchDate);
             pchDate = strtok(NULL, " ");
          }
-         Serial.println();
+         Serial.println(pch);
       }
       pch = strtok(NULL, "\t\n");
       y_index++;
