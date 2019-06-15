@@ -56,6 +56,7 @@ unsigned int y_index = 0;
 // design function 
 //    1 split char funtion recieve : base char , split_char  , delimeter
 //    2 split char to each char array : base char ,   each cahr 
+// ref to issue 18
 
 void setup()
 {
