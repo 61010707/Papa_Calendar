@@ -31,7 +31,8 @@ unsigned int free_stack_before = 0;
 //Test String
 boolean toggle = false;  // Control HTTPSRedirect
 boolean toggle1 = false; // Control wifi connect
-char test_GET[] = "English for Communication,\tFri Jun 14 2019 16:00:00 GMT+0700 (ICT)\nThai Society and Culture ,\tMon Jun 17 2019 12:00:00 GMT+0700 (ICT)\nThai Society and Culture ,\tTue Jun 18 2019 12:00:00 GMT+0700 (ICT)\nThai Society and Culture ,\tWed Jun 19 2019 12:00:00 GMT+0700 (ICT)\nEnglish for Communication ,\tThu Jun 20 2019 16:00:00 GMT+0700 (ICT)\n";
+char test_GET[1000] = "English for Communication,\tFri Jun 14 2019 16:00:00 GMT+0700 (ICT)\nThai Society and Culture ,\tMon Jun 17 2019 12:00:00 GMT+0700 (ICT)\nThai Society and Culture ,\tTue Jun 18 2019 12:00:00 GMT+0700 (ICT)\nThai Society and Culture ,\tWed Jun 19 2019 12:00:00 GMT+0700 (ICT)\nEnglish for Communication ,\tThu Jun 20 2019 16:00:00 GMT+0700 (ICT)\n";
+
 int i = 0;
 char split_char[20][1000];
 char title[20][1000];
@@ -59,6 +60,12 @@ unsigned int y_index = 0;
 //    2 split char to each char array : base char ,   each cahr
 // ref to issue 18
 
+void spl_str(char in_str[],char out_str[],char delimeter[])
+{
+Serial.println(in_str);
+Serial.println(out_str);
+Serial.println(delimeter);
+}
 void setup()
 {
    // put your setup code here, to run once:
@@ -76,9 +83,9 @@ void setup()
    {
       PreHTTPSRedirect();
    }
-
-   refStringFunc();
-   //ref to issue 18 
+   spl_str(test_GET,split_char[0],"\t\n");
+   //refStringFunc();
+   //ref to issue 18
    heapAndStack();
 }
 
@@ -241,7 +248,8 @@ void HTTPSRedirectConnect()
    delay(4000);
 }
 
-void refStringFunc()
+
+/*void refStringFunc()
 {
    Serial.println(test_GET);
    pch = strtok(test_GET, "\t\n");
@@ -408,3 +416,4 @@ void refStringFunc()
       }
    }
 }
+ */
