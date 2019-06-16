@@ -288,14 +288,14 @@ void print_info()
    {
       if (title[i][0] != '\0' || split_Date[i][0] != '\0')
       {
-         Serial.printf("[ %d ] Titile\t%s\n", i, title[i]);
+         Serial.printf("[ %d ] Titile\t\t%s\n", i, title[i]);
          Serial.printf("[ %d ] split_date\t%s\n", i, split_Date[i]);
-         Serial.printf("[ %d ] day\t%s\n", i, day[i]);
-         Serial.printf("[ %d ] month\t%s\n", i, month[i]);
-         Serial.printf("[ %d ] date\t%s\n", i, date[i]);
-         Serial.printf("[ %d ] year\t%s\n", i, year[i]);
-         Serial.printf("[ %d ] endTime\t%s\n", i, endTime[i]);
-         Serial.printf("[ %d ] date_int\t%d\n", i, date_int[i]);
+         Serial.printf("[ %d ] day\t\t%s\n", i, day[i]);
+         Serial.printf("[ %d ] month\t\t%s\n", i, month[i]);
+         Serial.printf("[ %d ] date\t\t%s\n", i, date[i]);
+         Serial.printf("[ %d ] year\t\t%s\n", i, year[i]);
+         Serial.printf("[ %d ] endTime\t\t%s\n", i, endTime[i]);
+         Serial.printf("[ %d ] date_int\t\t%d\n", i, date_int[i]);
       }
    }
 }
