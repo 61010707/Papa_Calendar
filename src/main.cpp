@@ -49,12 +49,13 @@ void str_analysis()
    filter_even_odd();
    date_info();
 }
+
 void setup()
 {
    // put your setup code here, to run once:
    Serial.begin(115200);
    Serial.flush();
-str_analysis();
+   str_analysis();
    print_info();
 }
 
@@ -247,7 +248,6 @@ void date_info()
    {
       if (split_Date[y_index][0] != '\0')
       {
-         Serial.printf("[ %d ] ", y_index);
          char *str;
          str = strtok(split_Date[y_index], " ");
          while (str != NULL)
@@ -268,7 +268,6 @@ void date_info()
                break;
             case 4:
                strcpy(year[y_index], str);
-
                break;
             case 5:
                strcpy(endTime[y_index], str);
