@@ -9,30 +9,28 @@ void HTTPSRedirectConnect();
 void wifiConnect();
 void heapAndStack();
 void refStringFunc();
+void split_str(char *in_str, char *out_str, int x_size, int y_size, char delimiter[]);
+void filter_even_odd();
+void date_info();
+void print_info();
 // Network setup
 const char *ssid = "DrZin";
 const char *pass = "0985626152a";
-
 // HTTPS setup
 const char *host = "script.google.com";
 const int httpsPort = 443;
 HTTPSRedirect *client = nullptr;
 const char *fingerPrint = "B1:E0:38:3F:63:8B:82:45:E0:90:72:01:80:B8:8D:04:58:34:08:F8";
-
 // Google script setup
 const char *GScriptId = "AKfycbwfRU5WMwEGKGKftI3Gwj4nCSVigayzfQwInbnjTaHeVpj1-rJy";
 String url = String("/macros/s/") + GScriptId + "/exec";
-
 // common variables
-
 unsigned int free_heap_before = 0;
 unsigned int free_stack_before = 0;
-
 //Test String
 boolean toggle = false;  // Control HTTPSRedirect
 boolean toggle1 = false; // Control wifi connect
 char test_GET[1000] = "English for Communication,\tFri Jun 14 2019 16:00:00 GMT+0700 (ICT)\nThai Society and Culture ,\tMon Jun 17 2019 12:00:00 GMT+0700 (ICT)\nThai Society and Culture ,\tTue Jun 18 2019 12:00:00 GMT+0700 (ICT)\nThai Society and Culture ,\tWed Jun 19 2019 12:00:00 GMT+0700 (ICT)\nEnglish for Communication ,\tThu Jun 20 2019 16:00:00 GMT+0700 (ICT)\n";
-
 char split_char[20][1000];
 char split_Date[20][100];
 char title[20][1000];
@@ -42,110 +40,9 @@ char month[20][10];
 char year[20][10];
 char endTime[20][10];
 int date_int[20];
-
 int x_size = sizeof(split_char[0]);
 int y_size = sizeof(split_char) / x_size;
-// design from long code to funtion
-// have variable
-//    split_char = for save ssplited char from responbody
-//    title
-//    day = day in text
-//    date = day in number
-//    month
-//    year
-//    endTime
-// design function
-//    1 split char funtion recieve : base char , split_char  , delimeter
-//    2 split char to each char array : base char ,   each cahr
-// ref to issue 18
-void split_str(char *in_str, char *out_str, int x_size, int y_size, char delimiter[])
-{
-   char *pch = strtok(in_str, delimiter);
-   int y_index = 0;
-   while (pch != NULL)
-   {
-      strcpy((out_str + (y_index * x_size)), pch);
-      y_index++;
-      pch = strtok(NULL, delimiter);
-   }
-}
-void filter_even_odd()
-{
-   for (int i = 0, y_title = 0, y_date = 0; i < y_size; i++)
-   {
-      if (i % 2 == 0)
-      {
-         y_title = i == 0 ? y_title : ++y_title;
-         strcpy(title[y_title], split_char[i]);
-      }
-      else
-      {
-         y_date = i == 1 ? y_date : ++y_date;
-         strcpy(split_Date[y_date], split_char[i]);
-      }
-   }
-}
 
-void date_info()
-{
-   String int_str;
-   for (int y_index = 0, number = 0; y_index < sizeof(split_Date) / sizeof(split_Date[0]); y_index++)
-   {
-      if (split_Date[y_index][0] != '\0')
-      {
-         Serial.printf("[ %d ] ", y_index);
-         char *str;
-         str = strtok(split_Date[y_index], " ");
-         while (str != NULL)
-         {
-            number++;
-            switch (number)
-            {
-            case 1:
-               strcpy(day[y_index], str);
-               break;
-            case 2:
-               strcpy(month[y_index], str);
-               break;
-            case 3:
-               strcpy(date[y_index], str);
-               int_str = str;
-               date_int[y_index] = int_str.toInt();
-               break;
-            case 4:
-               strcpy(year[y_index], str);
-
-               break;
-            case 5:
-               strcpy(endTime[y_index], str);
-               break;
-            default:
-               break;
-            }
-            str = strtok(NULL, " ");
-         }
-         number = 0;
-      }
-   }
-}
-
-void print_info()
-{
-   for (int i = 0; i < 20; i++)
-   {
-      if (title[i][0] != '\0' || split_Date[i][0] != '\0')
-      {
-         Serial.printf("[ %d ] Titile\t%s\n", i, title[i]);
-         Serial.printf("[ %d ] split_date\t%s\n", i, split_Date[i]);
-         Serial.printf("[ %d ] day\t%s\n", i, day[i]);
-         Serial.printf("[ %d ] month\t%s\n", i, month[i]);
-         Serial.printf("[ %d ] date\t%s\n", i, date[i]);
-         Serial.printf("[ %d ] year\t%s\n", i, year[i]);
-         Serial.printf("[ %d ] endTime\t%s\n", i, endTime[i]);
-         Serial.printf("[ %d ] date_int\t%d\n", i, date_int[i]);
-      }
-   }
-}
 void setup()
 {
    // put your setup code here, to run once:
@@ -312,171 +209,91 @@ void HTTPSRedirectConnect()
    delay(4000);
 }
 
-/*void refStringFunc()
+void split_str(char *in_str, char *out_str, int x_size, int y_size, char delimiter[])
 {
-   Serial.println(test_GET);
-   pch = strtok(test_GET, "\t\n");
-   Serial.print("\nWhile spilt responbody : [");
+   char *pch = strtok(in_str, delimiter);
+   int y_index = 0;
    while (pch != NULL)
    {
-      //Serial.println(pch);
-      for (x_index = 0; x_index < (unsigned)strlen(pch); x_index++)
-      {
-
-         split_char[y_index][x_index] = pch[x_index];
-      }
-      Serial.print("=");
-      pch = strtok(NULL, "\t\n");
+      strcpy((out_str + (y_index * x_size)), pch);
       y_index++;
+      pch = strtok(NULL, delimiter);
    }
-   Serial.print("]  100% ");
-   Serial.println();
-   Serial.println(">>>>> split string <<<<<");
-   Serial.println("=========================");
-
-   for (y_index = 0; y_index < 20; y_index++)
+}
+void filter_even_odd()
+{
+   for (int i = 0, y_title = 0, y_date = 0; i < y_size; i++)
    {
-      if (split_char[y_index][0] != '\0')
+      if (i % 2 == 0)
       {
-         Serial.printf("[ %u ] ", y_index);
-         for (x_index = 0; x_index < 100; x_index++)
-         {
-            if (split_char[y_index][x_index] != '\0')
-            {
-
-               Serial.print(split_char[y_index][x_index]);
-            }
-            else
-            {
-               break;
-            }
-         }
-         Serial.println();
+         y_title = (i == 0 ? y_title : ++y_title);
+         strcpy(title[y_title], split_char[i]);
+      }
+      else
+      {
+         y_date = i == 1 ? y_date : ++y_date;
+         strcpy(split_Date[y_date], split_char[i]);
       }
    }
-   Serial.println("=======================================");
-   Serial.println();
-   Serial.println("Title list from split string ");
-   int y_title = 0;
-   for (y_index = 0; y_index < 20; y_index++)
+}
+
+void date_info()
+{
+   String int_str;
+   for (unsigned int y_index = 0, number = 0; y_index < sizeof(split_Date) / sizeof(split_Date[0]); y_index++)
    {
-      if (y_index % 2 == 0 && split_char[y_index][0] != '\0')
+      if (split_Date[y_index][0] != '\0')
       {
-         Serial.printf("[ %u ] ", y_title);
-         for (x_index = 0; x_index < 100; x_index++)
+         Serial.printf("[ %d ] ", y_index);
+         char *str;
+         str = strtok(split_Date[y_index], " ");
+         while (str != NULL)
          {
-            if (split_char[y_index][x_index] != '\0')
+            number++;
+            switch (number)
             {
-               title[y_title][x_index] = split_char[y_index][x_index];
-               Serial.print(title[y_title][x_index]);
-            }
-            else
-            {
-               break;
-            }
-         }
-         Serial.println();
-         y_title++;
-      }
-   }
-
-   Serial.println("=======================================");
-   Serial.println();
-   Serial.println("End Date list from split string");
-
-   int y_endDate = 0;
-   for (y_index = 0; y_index < 20; y_index++)
-   {
-      if (y_index % 2 != 0 && split_char[y_index][0] != '\0')
-      {
-         Serial.printf("[ %u ] ", y_endDate);
-         for (x_index = 0; x_index < 100; x_index++)
-         {
-            if (split_char[y_index][x_index] != '\0')
-            {
-               endDate[y_endDate][x_index] = split_char[y_index][x_index];
-               Serial.print(endDate[y_endDate][x_index]);
-            }
-            else
-            {
-               break;
-            }
-         }
-         Serial.println();
-         y_endDate++;
-      }
-   }
-
-   Serial.println();
-   Serial.println("while split date...");
-   for (int y_splitDate = 0; y_splitDate < 20; y_splitDate++)
-   {
-
-      if (endDate[y_splitDate][0] != '\0')
-      {
-         int dateIndex = 0;
-         Serial.printf("[ date %d ]\n", y_splitDate);
-         pch = strtok(endDate[y_splitDate], " ");
-         while (pch != NULL)
-         {
-            Serial.printf("index %d :", dateIndex);
-            Serial.println(pch);
-            switch (dateIndex)
-            {
-            case 0:
-               Serial.print("\tin day :");
-               for (unsigned int x_day = 0; x_day < strlen(pch); x_day++)
-               {
-                  day[y_splitDate][x_day] = pch[x_day];
-                  Serial.print(day[y_splitDate][x_day]);
-               }
-               Serial.println();
-               break;
             case 1:
-               Serial.print("\tin month :");
-               for (unsigned int x_month = 0; x_month < strlen(pch); x_month++)
-               {
-                  month[y_splitDate][x_month] = pch[x_month];
-                  Serial.print(month[y_splitDate][x_month]);
-               }
-               Serial.println();
+               strcpy(day[y_index], str);
                break;
             case 2:
-               Serial.print("\tin date :");
-               for (unsigned int x_in_loop = 0; x_in_loop < strlen(pch); x_in_loop++)
-               {
-                  date[y_splitDate][x_in_loop] = pch[x_in_loop];
-                  Serial.print(date[y_splitDate][x_in_loop]);
-               }
-               Serial.println();
+               strcpy(month[y_index], str);
                break;
             case 3:
-               Serial.print("\tin year :");
-               for (unsigned int x_in_loop = 0; x_in_loop < strlen(pch); x_in_loop++)
-               {
-                  year[y_splitDate][x_in_loop] = pch[x_in_loop];
-                  Serial.print(year[y_splitDate][x_in_loop]);
-               }
-               Serial.println();
+               strcpy(date[y_index], str);
+               int_str = str;
+               date_int[y_index] = int_str.toInt();
                break;
             case 4:
-               Serial.print("\tin endTime :");
-               for (unsigned int x_in_loop = 0; x_in_loop < strlen(pch); x_in_loop++)
-               {
-                  endTime[y_splitDate][x_in_loop] = pch[x_in_loop];
-                  Serial.print(endTime[y_splitDate][x_in_loop]);
-               }
-               Serial.println();
+               strcpy(year[y_index], str);
+
+               break;
+            case 5:
+               strcpy(endTime[y_index], str);
                break;
             default:
                break;
             }
-
-            pch = strtok(NULL, " ");
-            dateIndex++;
+            str = strtok(NULL, " ");
          }
-         Serial.println("=============================");
+         number = 0;
       }
    }
 }
- */
+
+void print_info()
+{
+   for (int i = 0; i < 20; i++)
+   {
+      if (title[i][0] != '\0' || split_Date[i][0] != '\0')
+      {
+         Serial.printf("[ %d ] Titile\t%s\n", i, title[i]);
+         Serial.printf("[ %d ] split_date\t%s\n", i, split_Date[i]);
+         Serial.printf("[ %d ] day\t%s\n", i, day[i]);
+         Serial.printf("[ %d ] month\t%s\n", i, month[i]);
+         Serial.printf("[ %d ] date\t%s\n", i, date[i]);
+         Serial.printf("[ %d ] year\t%s\n", i, year[i]);
+         Serial.printf("[ %d ] endTime\t%s\n", i, endTime[i]);
+         Serial.printf("[ %d ] date_int\t%d\n", i, date_int[i]);
+      }
+   }
+}
