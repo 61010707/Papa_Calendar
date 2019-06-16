@@ -34,11 +34,12 @@ boolean toggle1 = false; // Control wifi connect
 char test_GET[1000] = "English for Communication,\tFri Jun 14 2019 16:00:00 GMT+0700 (ICT)\nThai Society and Culture ,\tMon Jun 17 2019 12:00:00 GMT+0700 (ICT)\nThai Society and Culture ,\tTue Jun 18 2019 12:00:00 GMT+0700 (ICT)\nThai Society and Culture ,\tWed Jun 19 2019 12:00:00 GMT+0700 (ICT)\nEnglish for Communication ,\tThu Jun 20 2019 16:00:00 GMT+0700 (ICT)\n";
 
 char split_char[20][1000];
+char split_Date[20][100];
+char date_info[100][100][100];
 char title[20][1000];
 char endDate[20][100];
-char splitDate[20][100];
 char day[20][10];
-char date[20][10];
+
 char month[20][10];
 char year[20][10];
 char endTime[20][10];
@@ -68,6 +69,9 @@ void split_str(char *in_str, char *out_str, int x_size, int y_size, char delimit
       pch = strtok(NULL, delimiter);
    }
 }
+void filter(char *in_str, char *out_odd, char *out_even)
+{
+}
 void setup()
 {
    // put your setup code here, to run once:
@@ -75,12 +79,31 @@ void setup()
    Serial.flush();
    int x_size = sizeof(split_char[0]);
    int y_size = sizeof(split_char) / x_size;
-   Serial.printf("x_index : %d , y_index : %d", x_size, y_size);
+   Serial.printf("x_index : %d , y_index : %d\n", x_size, y_size);
    split_str(test_GET, (char *)split_char, x_size, y_size, "\t\n");
    Serial.println();
-   for (int i = 0; i < y_size; i++)
+
+   for (int i = 0, y_title = 0, y_date = 0; i < y_size; i++)
    {
-      Serial.println(split_char[i]);
+      if (i % 2 == 0)
+      {
+         y_title = i == 0 ? y_title : ++y_title;
+         strcpy(title[y_title], split_char[i]);
+      }
+      else
+      {
+         y_date = i == 1 ? y_date : ++y_date;
+         strcpy(split_Date[y_date], split_char[i]);
+      }
+   }
+
+   for (int i = 0; i < 20; i++)
+   {
+      if (title[i][0] != '\0' || split_Date[i][0] != '\0')
+      {
+         Serial.printf("[ %d ] %s\n", i, title[i]);
+         Serial.printf("[ %d ] %s\n", i, split_Date[i]);
+      }
    }
    
 }
