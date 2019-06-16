@@ -35,15 +35,13 @@ char test_GET[1000] = "English for Communication,\tFri Jun 14 2019 16:00:00 GMT+
 
 char split_char[20][1000];
 char split_Date[20][100];
-char date_info[100][100][100];
 char title[20][1000];
-char endDate[20][100];
 char day[20][10];
-
 char month[20][10];
 char year[20][10];
 char endTime[20][10];
-
+int x_size = sizeof(split_char[0]);
+int y_size = sizeof(split_char) / x_size;
 // design from long code to funtion
 // have variable
 //    split_char = for save ssplited char from responbody
@@ -69,20 +67,8 @@ void split_str(char *in_str, char *out_str, int x_size, int y_size, char delimit
       pch = strtok(NULL, delimiter);
    }
 }
-void filter(char *in_str, char *out_odd, char *out_even)
+void filter_even_odd()
 {
-}
-void setup()
-{
-   // put your setup code here, to run once:
-   Serial.begin(115200);
-   Serial.flush();
-   int x_size = sizeof(split_char[0]);
-   int y_size = sizeof(split_char) / x_size;
-   Serial.printf("x_index : %d , y_index : %d\n", x_size, y_size);
-   split_str(test_GET, (char *)split_char, x_size, y_size, "\t\n");
-   Serial.println();
-
    for (int i = 0, y_title = 0, y_date = 0; i < y_size; i++)
    {
       if (i % 2 == 0)
@@ -96,7 +82,17 @@ void setup()
          strcpy(split_Date[y_date], split_char[i]);
       }
    }
+}
+void setup()
+{
+   // put your setup code here, to run once:
+   Serial.begin(115200);
+   Serial.flush();
 
+   Serial.printf("x_index : %d , y_index : %d\n", x_size, y_size);
+   split_str(test_GET, (char *)split_char, x_size, y_size, "\t\n");
+   Serial.println();
+   filter_even_odd();
    for (int i = 0; i < 20; i++)
    {
       if (title[i][0] != '\0' || split_Date[i][0] != '\0')
@@ -105,7 +101,22 @@ void setup()
          Serial.printf("[ %d ] %s\n", i, split_Date[i]);
       }
    }
-   
+
+   for (int y_index = 0, number = 0; y_index < sizeof(split_Date) / sizeof(split_Date[0]); y_index++)
+   {
+      if (split_Date[y_index][0] != '\0')
+      {
+         Serial.printf("[ %d ] ", y_index);
+         char *str;
+         str = strtok(split_Date[y_index], " ");
+         while (str != NULL)
+         {
+            Serial.printf("\t%d\t%s\n", number++, str);
+            str = strtok(NULL, " ");
+         }
+         number = 0;
+      }
+   }
 }
 
 void loop()
