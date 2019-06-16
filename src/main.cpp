@@ -41,8 +41,7 @@ char date[20][10];
 char month[20][10];
 char year[20][10];
 char endTime[20][10];
-int day_int[20];
-int month_int[20];
+int date_int[20];
 
 int x_size = sizeof(split_char[0]);
 int y_size = sizeof(split_char) / x_size;
@@ -86,14 +85,10 @@ void filter_even_odd()
       }
    }
 }
-void setup()
+
+void date_info()
 {
-   // put your setup code here, to run once:
-   Serial.begin(115200);
-   Serial.flush();
-   split_str(test_GET, (char *)split_char, x_size, y_size, "\t\n");
-   Serial.println();
-   filter_even_odd();
+   String int_str;
    for (int y_index = 0, number = 0; y_index < sizeof(split_Date) / sizeof(split_Date[0]); y_index++)
    {
       if (split_Date[y_index][0] != '\0')
@@ -107,7 +102,6 @@ void setup()
             switch (number)
             {
             case 1:
-            Serial.println(str);
                strcpy(day[y_index], str);
                break;
             case 2:
@@ -115,9 +109,12 @@ void setup()
                break;
             case 3:
                strcpy(date[y_index], str);
+               int_str = str;
+               date_int[y_index] = int_str.toInt();
                break;
             case 4:
                strcpy(year[y_index], str);
+
                break;
             case 5:
                strcpy(endTime[y_index], str);
@@ -130,19 +127,35 @@ void setup()
          number = 0;
       }
    }
+}
+
+void print_info()
+{
    for (int i = 0; i < 20; i++)
    {
       if (title[i][0] != '\0' || split_Date[i][0] != '\0')
       {
-         Serial.printf("[ %d ] Titile  %s\n", i, title[i]);
-         Serial.printf("[ %d ] split_date %s\n", i, split_Date[i]);
-         Serial.printf("[ %d ] day %s\n", i, day[i]);
-         Serial.printf("[ %d ] month %s\n", i, month[i]);
-         Serial.printf("[ %d ] date %s\n", i, date[i]);
-         Serial.printf("[ %d ] year %s\n", i, year[i]);
-         Serial.printf("[ %d ] endTime %s\n", i, endTime[i]);
+         Serial.printf("[ %d ] Titile\t%s\n", i, title[i]);
+         Serial.printf("[ %d ] split_date\t%s\n", i, split_Date[i]);
+         Serial.printf("[ %d ] day\t%s\n", i, day[i]);
+         Serial.printf("[ %d ] month\t%s\n", i, month[i]);
+         Serial.printf("[ %d ] date\t%s\n", i, date[i]);
+         Serial.printf("[ %d ] year\t%s\n", i, year[i]);
+         Serial.printf("[ %d ] endTime\t%s\n", i, endTime[i]);
+         Serial.printf("[ %d ] date_int\t%d\n", i, date_int[i]);
       }
    }
+}
+void setup()
+{
+   // put your setup code here, to run once:
+   Serial.begin(115200);
+   Serial.flush();
+   split_str(test_GET, (char *)split_char, x_size, y_size, "\t\n");
+   Serial.println();
+   filter_even_odd();
+   date_info();
+   print_info();
 }
 
 void loop()
