@@ -1,7 +1,18 @@
 /*
 comment all code code in new lang base => c++ oops arduino
  */
+#include <Arduino.h>
+#include <ESP8266WiFi.h>
+#include <DebugMacros.h>
+#include <HTTPSRedirect.h>
 
+void setup()
+{
+}
+
+void loop()
+{
+}
 // #include <Arduino.h>
 // #include <ESP8266WiFi.h>
 // #include <DebugMacros.h>
