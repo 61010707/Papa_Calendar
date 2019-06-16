@@ -43,15 +43,18 @@ int date_int[20];
 int x_size = sizeof(split_char[0]);
 int y_size = sizeof(split_char) / x_size;
 
+void str_analysis()
+{
+   split_str(test_GET, (char *)split_char, x_size, y_size, "\t\n");
+   filter_even_odd();
+   date_info();
+}
 void setup()
 {
    // put your setup code here, to run once:
    Serial.begin(115200);
    Serial.flush();
-   split_str(test_GET, (char *)split_char, x_size, y_size, "\t\n");
-   Serial.println();
-   filter_even_odd();
-   date_info();
+str_analysis();
    print_info();
 }
 
