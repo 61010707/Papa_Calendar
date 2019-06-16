@@ -37,9 +37,13 @@ char split_char[20][1000];
 char split_Date[20][100];
 char title[20][1000];
 char day[20][10];
+char date[20][10];
 char month[20][10];
 char year[20][10];
 char endTime[20][10];
+int day_int[20];
+int month_int[20];
+
 int x_size = sizeof(split_char[0]);
 int y_size = sizeof(split_char) / x_size;
 // design from long code to funtion
@@ -61,7 +65,6 @@ void split_str(char *in_str, char *out_str, int x_size, int y_size, char delimit
    int y_index = 0;
    while (pch != NULL)
    {
-      Serial.println(pch);
       strcpy((out_str + (y_index * x_size)), pch);
       y_index++;
       pch = strtok(NULL, delimiter);
@@ -88,20 +91,9 @@ void setup()
    // put your setup code here, to run once:
    Serial.begin(115200);
    Serial.flush();
-
-   Serial.printf("x_index : %d , y_index : %d\n", x_size, y_size);
    split_str(test_GET, (char *)split_char, x_size, y_size, "\t\n");
    Serial.println();
    filter_even_odd();
-   for (int i = 0; i < 20; i++)
-   {
-      if (title[i][0] != '\0' || split_Date[i][0] != '\0')
-      {
-         Serial.printf("[ %d ] %s\n", i, title[i]);
-         Serial.printf("[ %d ] %s\n", i, split_Date[i]);
-      }
-   }
-
    for (int y_index = 0, number = 0; y_index < sizeof(split_Date) / sizeof(split_Date[0]); y_index++)
    {
       if (split_Date[y_index][0] != '\0')
@@ -111,10 +103,44 @@ void setup()
          str = strtok(split_Date[y_index], " ");
          while (str != NULL)
          {
-            Serial.printf("\t%d\t%s\n", number++, str);
+            number++;
+            switch (number)
+            {
+            case 1:
+            Serial.println(str);
+               strcpy(day[y_index], str);
+               break;
+            case 2:
+               strcpy(month[y_index], str);
+               break;
+            case 3:
+               strcpy(date[y_index], str);
+               break;
+            case 4:
+               strcpy(year[y_index], str);
+               break;
+            case 5:
+               strcpy(endTime[y_index], str);
+               break;
+            default:
+               break;
+            }
             str = strtok(NULL, " ");
          }
          number = 0;
+      }
+   }
+   for (int i = 0; i < 20; i++)
+   {
+      if (title[i][0] != '\0' || split_Date[i][0] != '\0')
+      {
+         Serial.printf("[ %d ] Titile  %s\n", i, title[i]);
+         Serial.printf("[ %d ] split_date %s\n", i, split_Date[i]);
+         Serial.printf("[ %d ] day %s\n", i, day[i]);
+         Serial.printf("[ %d ] month %s\n", i, month[i]);
+         Serial.printf("[ %d ] date %s\n", i, date[i]);
+         Serial.printf("[ %d ] year %s\n", i, year[i]);
+         Serial.printf("[ %d ] endTime %s\n", i, endTime[i]);
       }
    }
 }
