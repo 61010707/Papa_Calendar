@@ -6,8 +6,10 @@ comment all code code in new lang base => c++ oops arduino
 #include <DebugMacros.h>
 #include <HTTPSRedirect.h>
 #include <Papa.h>
+Papa *calendar = new Papa();
 void setup()
 {
+    
 }
 
 void loop()
