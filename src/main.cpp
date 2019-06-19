@@ -9,7 +9,7 @@ comment all code code in new lang base => c++ oops arduino
 Papa *calendar = new Papa();
 void setup()
 {
-    
+
 }
 
 void loop()
@@ -47,7 +47,8 @@ void loop()
 // //Test String
 // boolean toggle = false;  // Control HTTPSRedirect
 // boolean toggle1 = false; // Control wifi connect
-// char test_GET[1000] = "English for Communication,\tFri Jun 14 2019 16:00:00 GMT+0700 (ICT)\nThai Society and Culture ,\tMon Jun 17 2019 12:00:00 GMT+0700 (ICT)\nThai Society and Culture ,\tTue Jun 18 2019 12:00:00 GMT+0700 (ICT)\nThai Society and Culture ,\tWed Jun 19 2019 12:00:00 GMT+0700 (ICT)\nEnglish for Communication ,\tThu Jun 20 2019 16:00:00 GMT+0700 (ICT)\n";
+// char test_GET[1000] = "English for Communication,
+/*\tFri Jun 14 2019 16:00:00 GMT+0700 (ICT)\nThai Society and Culture ,\tMon Jun 17 2019 12:00:00 GMT+0700 (ICT)\nThai Society and Culture ,\tTue Jun 18 2019 12:00:00 GMT+0700 (ICT)\nThai Society and Culture ,\tWed Jun 19 2019 12:00:00 GMT+0700 (ICT)\nEnglish for Communication ,\tThu Jun 20 2019 16:00:00 GMT+0700 (ICT)\n";
 // char split_char[20][1000];
 // char split_Date[20][100];
 // char title[20][1000];
@@ -148,7 +149,7 @@ void loop()
 //    {
 //       Serial.println("Certificate mis-match");
 //    }
-
+/*
 //    Serial.print("\nConnecting to google calendar ...");
 //    Serial.println("\n=============================");
 //    client->GET(url, host);
@@ -221,8 +222,10 @@ void loop()
 //    {
 //       Serial.println("Halting processor...");
 //       delete client;
-//       Serial.printf("Final free heap: %u\n", ESP.getFreeHeap());
-//       Serial.printf("Final stack: %u\n", ESP.getFreeContStack());
+//       Serial.printf("Final free heap: %u
+/*\n", ESP.getFreeHeap());*/
+//       Serial.printf("Final stack: %u
+/*\n", ESP.getFreeContStack());*/
 //       Serial.flush();
 //       ESP.deepSleep(0);
 //    }
@@ -263,7 +266,8 @@ void loop()
 //    String int_str;
 //    for (unsigned int y_index = 0, number = 0; y_index < sizeof(split_Date) / sizeof(split_Date[0]); y_index++)
 //    {
-//       if (split_Date[y_index][0] != '\0')
+//       if (split_Date[y_index][0] !=
+/*'\0')*/
 //       {
 //          char *str;
 //          str = strtok(split_Date[y_index], " ");
@@ -298,7 +302,7 @@ void loop()
 //       }
 //    }
 // }
-
+/*
 // void print_info()
 // {
 //    for (int i = 0; i < 20; i++)
@@ -315,4 +319,4 @@ void loop()
 //          Serial.printf("[ %d ] date_int\t\t%d\n", i, date_int[i]);
 //       }
 //    }
-// }
+// }*/
